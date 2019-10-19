@@ -16,10 +16,12 @@ class MaxHeap {
     if (this.size === 0) {
       return;
     } else {
-      this.restoreRootFromLastInsertedNode(this.detachRoot());
+      // create variable to note lose context
+      const a = this.detachRoot(); // !!!!!!!!!!! fuuuu
+      this.restoreRootFromLastInsertedNode(a);
       this.shiftNodeDown(this.root);
       this.size -= 1; // !!!
-      return this.detachRoot().data;
+      return a.data;
     }
   }
 
@@ -42,7 +44,7 @@ class MaxHeap {
   }
 
   size() {
-    return this.size;
+    return this.parentNodes.length;
   }
 
   isEmpty() {
@@ -57,6 +59,7 @@ class MaxHeap {
     this.root = null;
     this.parentNodes = [];
     this.size = 0;
+    return this;
   }
 
   insertNode(node) {
