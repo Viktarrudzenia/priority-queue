@@ -7,17 +7,26 @@ class PriorityQueue {
   }
 
   push(data, priority) {
-    if (this.maxSize >= 30) {
+    if (this.size() === this.maxSize) {
       throw new Error("maxSize more than 30");
     }
     this.heap.push(data, priority);
   }
 
-  shift() {}
+  shift() {
+    if (this.heap.isEmpty()) {
+      throw new Error("maxHeap is empty!");
+    }
+    return this.heap.pop();
+  }
 
-  size() {}
+  size() {
+    return this.heap.size;
+  }
 
-  isEmpty() {}
+  isEmpty() {
+    this.heap.isEmpty();
+  }
 }
 
 module.exports = PriorityQueue;

@@ -12,10 +12,20 @@ class MaxHeap {
     this.shiftNodeUp(new Node(data, priority));
   }
 
-  pop() {}
+  pop() {
+    if ((this.size = 0)) {
+      return;
+    } else {
+      this.detachRoot();
+      this.restoreRootFromLastInsertedNode();
+      this.shiftNodeDown(this.root);
+      return this.root;
+    }
+  }
 
   detachRoot() {
     this.root = null;
+    return this.root;
   }
 
   restoreRootFromLastInsertedNode(detached) {}
@@ -25,7 +35,7 @@ class MaxHeap {
   }
 
   isEmpty() {
-    if (!this.size) return true;
+    if (this.size === 0 || this.parentNodes.length === 0) return true;
   }
 
   clear() {
@@ -39,14 +49,48 @@ class MaxHeap {
       this.root = node;
       this.parentNodes.push(node);
       this.size += 1;
+
+      // fashion check for existance of left child
+      // can throw error (:
+    } else if (this.size % 2 !== 0) {
+      this.parentNodes.push(node);
+      this.parentNodes[0].appendChild(node);
+      this.size += 1;
     } else {
       this.parentNodes.push(node);
-      this.appendChild(node);
+      this.parentNodes[0].appendChild(node);
       this.size += 1;
+      // just now it right child of parent and not have childs -> delete from PARENT nodes
+      this.parentNodes.shift();
     }
   }
 
-  shiftNodeUp(node) {}
+  shiftNodeUp(node) {
+    //check is our node child of somebody
+    if (node.parent !== null) {
+      //check is our priority more than parent priority -> if true - swap them
+      if (node.priority > node.parent.priority) {
+        //check is our parent root (last and higher element)
+        if (node.parent === this.root) {
+          this.root = node;
+        }
+
+        // check if PARENT is right child -> so we can swap with it
+        if (this.parentNodes.indexOf[node.parent] !== -1) {
+          this.parentNodes[this.parentNodes.indexOf(node.parent)] = node;
+          this.parentNodes[this.parentNodes.indexOf(node)] = node.parent;
+        } else {
+          this.parentNodes[this.parentNodes.indexOf(node)] = node.parent;
+        }
+
+        node.swapWithParent();
+        this.shiftNodeUp(node);
+      }
+      // if we are not child of somebody - we are root 8)
+    } else {
+      this.root = node;
+    }
+  }
 
   shiftNodeDown(node) {}
 }
