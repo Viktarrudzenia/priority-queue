@@ -13,11 +13,10 @@ class MaxHeap {
   }
 
   pop() {
-    if ((this.size = 0)) {
+    if (this.size === 0) {
       return;
     } else {
-      this.detachRoot();
-      this.restoreRootFromLastInsertedNode();
+      this.restoreRootFromLastInsertedNode(this.detachRoot());
       this.shiftNodeDown(this.root);
       return this.root;
     }
