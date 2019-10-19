@@ -34,7 +34,11 @@ class MaxHeap {
   }
 
   isEmpty() {
-    if (this.size === 0 || this.parentNodes.length === 0) return true;
+    if (this.size === 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   clear() {
@@ -74,12 +78,16 @@ class MaxHeap {
           this.root = node;
         }
 
+        // create variables because below this .ths -> unbind..... collect CORRECT data with CORRECT this
+        const indexInThisParentNodesNode = this.parentNodes.indexOf(node);
+        const indexInThisParentNodesNodeParent = this.parentNodes.indexOf(node.parent);
+
         // check if PARENT is right child -> so we can swap with it
-        if (this.parentNodes.indexOf[node.parent] !== -1) {
-          this.parentNodes[this.parentNodes.indexOf(node.parent)] = node;
-          this.parentNodes[this.parentNodes.indexOf(node)] = node.parent;
+        if (indexInThisParentNodesNodeParent !== -1) {
+          this.parentNodes[indexInThisParentNodesNodeParent] = node;
+          this.parentNodes[indexInThisParentNodesNode] = node.parent; // fUUU dat this .this
         } else {
-          this.parentNodes[this.parentNodes.indexOf(node)] = node.parent;
+          this.parentNodes[indexInThisParentNodesNode] = node.parent;
         }
 
         node.swapWithParent();
