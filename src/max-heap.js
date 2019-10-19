@@ -18,7 +18,8 @@ class MaxHeap {
     } else {
       this.restoreRootFromLastInsertedNode(this.detachRoot());
       this.shiftNodeDown(this.root);
-      return this.root;
+      this.size -= 1; // !!!
+      return this.detachRoot().data;
     }
   }
 
@@ -29,12 +30,16 @@ class MaxHeap {
       this.parentNodes.shift();
     }
     this.root = null;
-    this.size -= 1;
 
     return rootNode;
   }
 
-  restoreRootFromLastInsertedNode(detached) {}
+  restoreRootFromLastInsertedNode(detached) {
+    if (this.size === 0) {
+      return;
+    }
+    this.root = this.parentNodes.pop();
+  }
 
   size() {
     return this.size;
@@ -106,7 +111,49 @@ class MaxHeap {
     }
   }
 
-  shiftNodeDown(node) {}
+  shiftNodeDown(node) {
+    // check untill node become invalid with check of left node like a man 8-)
+    if (node === null || this.size % 2 !== 0) {
+      return;
+    }
+
+    // 1. check which child priority higher -> its our client :)
+    let leftOrRightHighest = null;
+
+    if (node.left !== null && node.right !== null) {
+      node.left.priority > node.right.priority
+        ? (leftOrRightHighest = node.left)
+        : (leftOrRightHighest = node.right);
+
+      // else we have only left child, so it our client for swap
+    } else {
+      leftOrRightHighest = node.left;
+    }
+
+    // 2. check our leftOrRightHiest priority -> if exist check MY priority with IT
+    if (leftOrRightHighest !== null && node.priority < leftOrRightHighest.priority) {
+      // collect CORRECT data with CORRECT this --- like in shiftNodeUp method
+      const indexInThisParentNodesNode = this.parentNodes.indexOf(node);
+      const indexInThisParentNodesChild = this.parentNodes.indexOf(leftOrRightHighest);
+
+      //check does we root now, so we can end this clown fiesta
+      if (node === this.root) {
+        this.root = leftOrRightHighest;
+      }
+
+      // check index of our child -> swap it
+      if (indexInThisParentNodesChild !== -1) {
+        this.parentNodes[indexInThisParentNodesNode] = this.parentNodes[
+          indexInThisParentNodesChild
+        ];
+        this.parentNodes[indexInThisParentNodesChild] = node;
+      }
+
+      // swap it and dat thing which i name " calls itself recursively". eat it tests!
+      leftOrRightHighest.swapWithParent();
+      this.shiftNodeDown(node);
+    }
+  }
 }
 
 module.exports = MaxHeap;
