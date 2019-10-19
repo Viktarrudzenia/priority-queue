@@ -25,7 +25,7 @@ class PriorityQueue {
   }
 
   isEmpty() {
-    this.heap.isEmpty();
+    return this.heap.isEmpty(); // !!!! return forgotten!!!
   }
 }
 
